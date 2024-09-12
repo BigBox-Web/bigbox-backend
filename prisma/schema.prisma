@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  Admin
+  Frontend
+  Backend
+  UIUX
+  DevOps
+  DataScientist
+  DataAnalyst
+  ITSupport
+  ProductManager
+  ProjectManager
+  User
+}
+
+enum StatusType {
+  Backlog
+  OnProgress
+  Resolved
+}
+
+enum PriorityType {
+  High
+  Normal
+}
+
+model Users {
+  id           String    @id @default(cuid())
+  role         UserRole  @default(User)
+  email        String    @unique
+  fullname     String
+  username     String    @unique
+  phone_number String
+  password     String
+  profile_url  String    @default("https://tl.vhv.rs/dpng/s/541-5413387_log-in-sign-up-micro-environment-diagram-hd.png")
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+  tickets      Tickets[]
+  replies      Replies[]
+}
+
+model Tickets {
+  id              Int          @id @default(autoincrement())
+  status          StatusType   @default(Backlog)
+  priority_status PriorityType @default(Normal)
+  request_ticket  String
+  due_date        String
+  role_pic        String
+  product_status  String
+  ticket_body     String       @db.Text
+  user_id         String
+  user            Users        @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  replies         Replies[]
+}
+
+model Replies {
+  id         Int     @id @default(autoincrement())
+  reply_body String  @db.Text
+  ticket_id  Int
+  user_id    String
+  ticket     Tickets @relation(fields: [ticket_id], references: [id], onDelete: Cascade)
+  user       Users   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
