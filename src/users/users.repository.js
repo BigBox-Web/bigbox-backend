@@ -5,10 +5,10 @@ const insertUser = async (newUserData) => {
   const hashedPassword = await bcrypt.hash(newUserData.password, 10);
   const user = await prisma.users.create({
     data: {
-      email: newUserData.email,
       fullname: newUserData.fullname,
-      username: newUserData.username,
+      email: newUserData.email,
       phone_number: newUserData.phone_number,
+      username: newUserData.username,
       password: hashedPassword,
     },
   });
@@ -20,6 +20,16 @@ const findUserByEmail = async (email) => {
   const user = await prisma.users.findUnique({
     where: {
       email,
+    },
+  });
+
+  return user;
+};
+
+const findUserByUsername = async (username) => {
+  const user = await prisma.users.findUnique({
+    where: {
+      username,
     },
   });
 
@@ -79,13 +89,24 @@ const editUser = async (id, userData) => {
   return user;
 };
 
-const updatePasswordUser = async (email, newPassword) => {
-  await resetPasswordUserByEmail(email, newPassword);
+const updatePasswordUser = async (username, newPassword) => {
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  const user = await prisma.users.update({
+    where: {
+      username,
+    },
+    data: {
+      password: hashedPassword,
+    },
+  });
+
+  return user;
 };
 
 module.exports = {
   insertUser,
   findUserByEmail,
+  findUserByUsername,
   resetPasswordUserByEmail,
   findUsers,
   findUserById,

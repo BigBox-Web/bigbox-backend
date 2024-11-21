@@ -41,10 +41,10 @@ enum PriorityType {
 model Users {
   id           String    @id @default(cuid())
   role         UserRole  @default(User)
-  email        String    @unique
   fullname     String
-  username     String    @unique
+  email        String    @unique
   phone_number String
+  username     String    @unique
   password     String
   profile_url  String    @default("https://tl.vhv.rs/dpng/s/541-5413387_log-in-sign-up-micro-environment-diagram-hd.png")
   created_at   DateTime  @default(now())

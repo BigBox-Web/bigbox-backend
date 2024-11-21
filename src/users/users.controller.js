@@ -12,7 +12,7 @@ router.post("/register", async (req, res) => {
 
     res.status(201).send({
       data: user,
-      message: "User created successfully.",
+      message: "User created successfully",
     });
   } catch (error) {
     res.status(400).send(error.message);
@@ -21,8 +21,8 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const user = await loginUser({ email, password });
+    const { username, password } = req.body;
+    const user = await loginUser({ username, password });
 
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
@@ -33,7 +33,7 @@ router.post("/login", async (req, res) => {
         accessToken,
         refreshToken,
       },
-      message: "Login successful.",
+      message: "Login successful",
     });
   } catch (error) {
     res.status(401).send(error.message);
@@ -47,7 +47,7 @@ router.post("/forgot-password", async (req, res) => {
 
     res.status(200).send({
       data: user,
-      message: "New password sent to your email.",
+      message: "New password sent to your email",
     });
   } catch (error) {
     res.status(400).send(error.message);
@@ -60,7 +60,7 @@ router.get("/", authenticateToken, async (req, res) => {
 
     res.status(200).send({
       data: user,
-      message: "Users retrieved successfully.",
+      message: "Users retrieved successfully",
     });
   } catch (error) {
     res.status(500).send(error.message);
@@ -74,7 +74,7 @@ router.get("/:id", authenticateToken, async (req, res) => {
 
     res.status(200).send({
       data: user,
-      message: "User retrieved successfully.",
+      message: "User retrieved successfully",
     });
   } catch (error) {
     res.status(500).send(error.message);
@@ -86,7 +86,7 @@ router.delete("/:id", authenticateToken, async (req, res) => {
     const userId = req.params.id;
     await deleteUserById(userId);
 
-    res.status(200).send("User deleted successfully.");
+    res.status(200).send("User deleted successfully");
   } catch (error) {
     res.status(400).send(error.message);
   }
@@ -100,7 +100,7 @@ router.patch("/settings/profile/:id", authenticateToken, profileUpload, async (r
 
     res.status(200).send({
       data: user,
-      message: "User profile updated successfully.",
+      message: "User profile updated successfully",
     });
   } catch (error) {
     res.status(400).send(error.message);
@@ -114,7 +114,7 @@ router.post("/settings/change-password", authenticateToken, async (req, res) => 
 
     res.status(200).send({
       data: user,
-      message: "Password changed successfully.",
+      message: "Password changed successfully",
     });
   } catch (error) {
     res.status(400).send(error.message);
